@@ -5,7 +5,7 @@ const books = [
     author: "daniel",
     genre: "technology",
     year: 2000,
-    copies: 2,
+    copies: 1,
     availableCopies: 1,
   },
 ];
