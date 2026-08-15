@@ -5,4 +5,5 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET || "JWT_SECRET",
   jwtExpiresIn: "7d",
   bcryptRounds: 10,
+  loanDurationDays: Number(process.env.LOAN_DURATION_DAYS) || 14,
 };
