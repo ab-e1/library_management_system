@@ -4,7 +4,7 @@ const members = [
     name: "Abel",
     email: "abel@example.com",
     password: "123abc123",
-    registeredAt: "today",
+    registeredAt: new Date().toISOString(),
   },
 ];
 

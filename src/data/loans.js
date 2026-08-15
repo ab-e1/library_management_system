@@ -1,11 +1,11 @@
 const loans = [
   {
-    id: 1,
-    memberId: 1,
-    bookId: 1,
-    borrowedAt: "today",
-    dueAt: "week later",
-    status: "borrowed",
+    id,
+    memberId,
+    bookId,
+    borrowedAt,
+    dueAt,
+    status,
   },
 ];
 
