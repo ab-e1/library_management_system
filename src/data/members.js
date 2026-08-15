@@ -1,4 +1,4 @@
-require("bcrypt").config();
+const bcrypt = require("bcrypt");
 
 const members = [
   {
