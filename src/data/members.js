@@ -1,9 +1,11 @@
+require("bcrypt").config();
+
 const members = [
   {
     id: 1,
     name: "Abel",
     email: "abel@example.com",
-    password: "123abc123",
+    password: bcrypt.hashSync("12345abc", 10),
     registeredAt: new Date().toISOString(),
   },
 ];
