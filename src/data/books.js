@@ -1,14 +1,16 @@
 const books = [
   {
     id: 1,
-    name: null,
-    author: null,
-    instock: null,
+    title: "clean code",
+    author: "daniel",
+    genre: "technology",
+    copies: 2,
+    availableCopies: 1,
   },
 ];
 
 const nextId = () => {
-  return Math.max(...books.map((b) => b.id)) + 1;
+  return books.length ? Math.max(...books.map((b) => b.id)) + 1 : 1;
 };
 
 module.exports = { books, nextId };
