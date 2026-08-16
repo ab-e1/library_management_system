@@ -14,6 +14,10 @@ const getBookById = (id) => {
 };
 
 const createBook = (data) => {
+  const existing = duplicateCheck(data);
+  if (existing) {
+    return { ok: false, error: "book already exists", data: existing };
+  }
   const book = {
     id: nextId(),
     ...data,
@@ -47,10 +51,31 @@ const deleteBook = (id) => {
   }
 };
 
+const addCopies = (bookId, quantity) => {
+  const book = books.find((b) => b.id === Number(bookId));
+  if (!book) {
+    return { ok: false, error: "no book with the provided book id" };
+  }
+  book.copies += Number(quantity);
+  book.availableCopies += Number(quantity);
+  return { ok: true, data: book };
+};
+
+const duplicateCheck = (data) => {
+  const title = data.title;
+  const author = data.author;
+  const duplicate = books.find(
+    (b) =>
+      b.title.trim().toLowerCase() === title.trim().toLowerCase() &&
+      b.author.trim().toLowerCase() === author.trim().toLowerCase(),
+  );
+  return duplicate;
+};
 module.exports = {
   getAllBooks,
   getBookById,
   createBook,
   updateBook,
   deleteBook,
+  addCopies,
 };
