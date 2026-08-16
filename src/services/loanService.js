@@ -3,7 +3,6 @@ const { members } = require("../data/members.js");
 const { books } = require("../data/books.js");
 const { now, daysFromNow } = require("../utils/date.js");
 const { loanDurationDays } = require("../config/index.js");
-const config = require("../config/index.js");
 
 const getLoanById = (id) => {
   const loan = loans.find((s) => s.id === Number(id));
