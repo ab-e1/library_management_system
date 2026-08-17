@@ -6,6 +6,6 @@ const router = Router();
 router.get("/", loanController.getAllLoans);
 router.get("/:id", loanController.getLoanById);
 router.post("/borrow/:memberId/:bookId", loanController.borrowBook);
-router.put("/:id", loanController.returnBook);
+router.put("/:id/return", loanController.returnBook);
 
 module.exports = router;

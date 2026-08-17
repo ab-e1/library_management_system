@@ -35,8 +35,8 @@ const borrowBook = (memberId, bookId) => {
 
   const loan = {
     id: nextId(),
-    memberId,
-    bookId,
+    memberId: Number(memberId),
+    bookId: Number(bookId),
     borrowedAt: now(),
     dueAt: daysFromNow(loanDurationDays),
     returnedAt: null,
