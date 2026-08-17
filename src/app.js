@@ -5,9 +5,10 @@ const loansRoute = require("./routes/loansRoute.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
 const app = express();
+app.use(express.json());
 
 app.use("/api/books", booksRoute);
-app.use("api/members", membersRoute);
+app.use("/api/members", membersRoute);
 app.use("/api/loans", loansRoute);
 
 app.use(errorHandler);
