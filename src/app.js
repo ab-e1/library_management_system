@@ -15,3 +15,5 @@ app.use("/api/members", membersRoute);
 app.use("/api/loans", loansRoute);
 
 app.use(errorHandler);
+
+module.exports = app;
