@@ -21,6 +21,7 @@ const createBook = (data) => {
   const book = {
     id: nextId(),
     ...data,
+    availableCopies: Number(data.copies),
   };
   books.push(book);
   return {
