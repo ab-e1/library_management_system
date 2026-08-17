@@ -20,6 +20,43 @@ const options = {
       version: "1.0.0",
       description: "A library management API built with Express",
     },
+    components: {
+      schemas: {
+        Book: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            title: { type: "string" },
+            author: { type: "string" },
+            genre: { type: "string" },
+            year: { type: "integer" },
+            copies: { type: "integer" },
+            availableCopies: { type: "integer" },
+          },
+        },
+        Member: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            name: { type: "string" },
+            email: { type: "string" },
+            registeredAt: { type: "string", format: "date-time" },
+          },
+        },
+        Loan: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            memberId: { type: "integer" },
+            bookId: { type: "integer" },
+            borrowedAt: { type: "string", format: "date-time" },
+            dueAt: { type: "string", format: "date-time" },
+            returnedAt: { type: "string", format: "date-time", nullable: true },
+            status: { type: "string", enum: ["borrowed", "returned"] },
+          },
+        },
+      },
+    },
   },
   apis: ["./src/routes/*.js"],
 };
