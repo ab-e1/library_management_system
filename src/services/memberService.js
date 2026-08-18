@@ -67,8 +67,45 @@ const deleteMember = (id) => {
   return { ok: true, data: memberInfo(deleted) };
 };
 
+const createLibrarian = (data) => {
+  const duplicate = members.find(
+    (s) => s.email.toLowerCase().trim() === data.email.toLowerCase().trim(),
+  );
+  if (duplicate && duplicate.role === "member") {
+    return {
+      ok: false,
+      error: "email already registered as a member ",
+    };
+  }
+  if (duplicate && duplicate.role === "librarian") {
+    return {
+      ok: false,
+      error: "librarian already registered with this email",
+    };
+  }
+  if (duplicate && duplicate.role === "admin") {
+    return {
+      ok: false,
+      error: "email registed as admin",
+    };
+  }
+  const librarian = {
+    id: nextId(),
+    name: data.name,
+    email: data.email.toLowerCase(),
+    password: bcrypt.hashSync(data.password, bcryptRounds),
+    registeredAt: now(),
+  };
+
+  return {
+    ok: true,
+    data: memberInfo(librarian),
+  };
+};
+
 module.exports = {
   createMember,
+  createLibrarian,
   getAllMembers,
   getMemberByEmail,
   getMemberById,

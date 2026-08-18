@@ -54,6 +54,15 @@ const deleteMember = (req, res) => {
   return success(res, result.data);
 };
 
+const createLibrarian = (req, res) => {
+  const reasult = memberService.createLibrarian(req.body);
+  if (!result.ok) {
+    return failure(res, result.error, 401);
+  }
+
+  return success(res, result.data, 201);
+};
+
 module.exports = {
   createMember,
   getAllMembers,
@@ -61,4 +70,5 @@ module.exports = {
   getMemberById,
   updateMember,
   deleteMember,
+  createLibrarian,
 };

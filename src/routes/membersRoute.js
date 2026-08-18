@@ -108,6 +108,14 @@ router.post(
   memberController.createMember,
 );
 
+router.post(
+  "/librarian",
+  auth,
+  roleCheck("admin"),
+  validateMember,
+  memberController.createLibrarian,
+);
+
 /**
  * @swagger
  * /api/members/{id}:
