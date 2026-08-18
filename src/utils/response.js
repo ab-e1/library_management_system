@@ -10,6 +10,7 @@ const memberInfo = (member) => {
     id: member.id,
     name: member.name,
     email: member.email,
+    role: member.role,
     registeredAt: member.registeredAt,
   };
 };
