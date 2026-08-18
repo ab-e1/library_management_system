@@ -93,6 +93,7 @@ const createLibrarian = (data) => {
     id: nextId(),
     name: data.name,
     email: data.email.toLowerCase(),
+    role: "librarian",
     password: bcrypt.hashSync(data.password, bcryptRounds),
     registeredAt: now(),
   };
