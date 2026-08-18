@@ -6,7 +6,7 @@ const auth = (req, res, next) => {
   if (!header) {
     return failure(res, "not token provided", 401);
   }
-  const token = header.split(" ", [1]);
+  const token = header.split(" ")[1];
 
   try {
     const decodedHeader = verifyToken(token);
