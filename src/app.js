@@ -2,6 +2,7 @@ const express = require("express");
 const booksRoute = require("./routes/booksRoute.js");
 const membersRoute = require("./routes/membersRoute.js");
 const loansRoute = require("./routes/loansRoute.js");
+const authRoute = require("./routes/authRoute.js");
 const errorHandler = require("./middleware/errorHandler.js");
 const logger = require("./middleware/logger.js");
 const swaggerJsdoc = require("swagger-jsdoc");
@@ -67,6 +68,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/books", booksRoute);
 app.use("/api/members", membersRoute);
 app.use("/api/loans", loansRoute);
+app.use("/api/auth", authRoute);
 
 app.use(errorHandler);
 
