@@ -6,7 +6,7 @@ const pool = new Pool({
 });
 
 pool.on("error", (err) => {
-  console.error("unknown error connceting to database:", err.message);
+  console.error("unknown error connecting to database:", err.message);
 });
 
 module.exports = pool;
