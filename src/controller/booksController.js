@@ -1,14 +1,14 @@
 const bookService = require("../services/bookService.js");
 const { success, failure } = require("../utils/response.js");
 
-const getAllBooks = (req, res) => {
-  const result = bookService.getAllBooks();
+const getAllBooks = async (req, res) => {
+  const result = await bookService.getAllBooks();
 
   return success(res, result.data);
 };
 
-const createBook = (req, res) => {
-  const result = bookService.createBook(req.body);
+const createBook = async (req, res) => {
+  const result = await bookService.createBook(req.body);
   if (!result.ok && result.error === "book already exists") {
     return failure(res, result.error, 409);
   }
@@ -19,8 +19,8 @@ const createBook = (req, res) => {
   return success(res, result.data, 201);
 };
 
-const getBookById = (req, res) => {
-  const result = bookService.getBookById(req.params.id);
+const getBookById = async (req, res) => {
+  const result = await bookService.getBookById(req.params.id);
 
   if (!result.ok) {
     return failure(res, result.error, 404);
@@ -29,8 +29,8 @@ const getBookById = (req, res) => {
   return success(res, result.data);
 };
 
-const updateBook = (req, res) => {
-  const result = bookService.updateBook(req.params.id, req.body);
+const updateBook = async (req, res) => {
+  const result = await bookService.updateBook(req.params.id, req.body);
 
   if (!result.ok) {
     return failure(res, result.error, 404);
@@ -39,8 +39,8 @@ const updateBook = (req, res) => {
   return success(res, result.data);
 };
 
-const deleteBook = (req, res) => {
-  const result = bookService.deleteBook(req.params.id);
+const deleteBook = async (req, res) => {
+  const result = await bookService.deleteBook(req.params.id);
 
   if (!result.ok) {
     return failure(res, result.error, 404);
@@ -49,13 +49,21 @@ const deleteBook = (req, res) => {
   return success(res, result.data);
 };
 
-const addCopies = (req, res) => {
-  const result = bookService.addCopies(req.params.id, req.body.quantity);
+const addCopies = async (req, res) => {
+  const result = await bookService.addCopies(req.params.id, req.body.quantity);
 
   if (!result.ok) {
     return failure(res, result.error, 404);
   }
 
+  return success(res, result.data);
+};
+
+const patchBook = async (req, res) => {
+  const result = await bookService.patchBook(req.params.id, req.body);
+  if (!result.ok) {
+    return failure(res, result.error, 404);
+  }
   return success(res, result.data);
 };
 
@@ -64,6 +72,7 @@ module.exports = {
   createBook,
   getBookById,
   updateBook,
+  patchBook,
   deleteBook,
   addCopies,
 };

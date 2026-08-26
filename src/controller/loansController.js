@@ -1,14 +1,14 @@
 const loanService = require("../services/loanService.js");
 const { success, failure } = require("../utils/response.js");
 
-const getAllLoans = (req, res) => {
-  const result = loanService.getAllLoans(req.query);
+const getAllLoans = async (req, res) => {
+  const result = await loanService.getAllLoans(req.query);
 
   return success(res, result.data);
 };
 
-const getLoanById = (req, res) => {
-  const result = loanService.getLoanById(req.params.id);
+const getLoanById = async (req, res) => {
+  const result = await loanService.getLoanById(req.params.id);
 
   if (!result.ok) {
     return failure(res, result.error, 404);
@@ -17,8 +17,11 @@ const getLoanById = (req, res) => {
   return success(res, result.data);
 };
 
-const borrowBook = (req, res) => {
-  const result = loanService.borrowBook(req.params.memberId, req.params.bookId);
+const borrowBook = async (req, res) => {
+  const result = await loanService.borrowBook(
+    req.params.memberId,
+    req.params.bookId,
+  );
   if (
     !result.ok &&
     result.error === "a member can not borrow the same book twice"
@@ -32,8 +35,8 @@ const borrowBook = (req, res) => {
   return success(res, result.data, 201);
 };
 
-const returnBook = (req, res) => {
-  const result = loanService.returnBook(req.params.id);
+const returnBook = async (req, res) => {
+  const result = await loanService.returnBook(req.params.id);
 
   if (!result.ok && result.error === "loan already returned") {
     return failure(res, result.error, 409);
