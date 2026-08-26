@@ -173,6 +173,37 @@ router.put(
 /**
  * @swagger
  * /api/books/{id}:
+ *    patch:
+ *      summary: patch a book
+ *      tags: [Books]
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          schema:
+ *            type: integer
+ *          description: the book id
+ *      responses:
+ *        200:
+ *            description: successfully patched
+ *        400:
+ *            description: not valid
+ *        403:
+ *            description: not authorized
+ *        404:
+ *            description: not found
+ */
+
+router.patch(
+  "/:id",
+  auth,
+  roleCheck("admin", "librarian"),
+  booksController.patchBook,
+);
+
+/**
+ * @swagger
+ * /api/books/{id}:
  *   delete:
  *     summary: Delete a book
  *     tags: [Books]
