@@ -1,6 +1,6 @@
 /* create a book table */
 
-CREATE TABLE books (
+CREATE TABLE IF NOT EXISTS books(
   id serial PRIMARY KEY,
   title VARCHAR(100) NOT NULL,
   author VARCHAR(50) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE books (
 
 /* cretae a members table*/
 
-CREATE TABLE members (
+CREATE TABLE IF NOT EXISTS members (
     id SERIAL PRIMARY KEY,
     name  VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -23,7 +23,7 @@ CREATE TABLE members (
 
 /* create a loan table */
  
- CREATE TABLE loans (
+ CREATE TABLE IF NOT EXISTS loans(
     id SERIAL PRIMARY KEY,
     book_id INTEGER REFERENCES books(id),
     member_id INTEGER REFERENCES members(id),

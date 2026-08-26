@@ -19,7 +19,7 @@ const seed = async () => {
   );
   await pool.query(
     "INSERT INTO members (name , email, password, role, registered_at) VALUES ($1, $2 , $3, $4, NOW())",
-    ["Abel", "abel@email.com", userHashPassword, "member"],
+    ["member", "member@email.com", userHashPassword, "member"],
   );
   console.log("database seeded");
   process.exit();
