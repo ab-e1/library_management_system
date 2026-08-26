@@ -3,6 +3,8 @@ const { validateMember } = require("../middleware/validation.js");
 const memberController = require("../controller/membersController.js");
 const roleCheck = require("../middleware/roleCheck.js");
 const auth = require("../middleware/auth.js");
+const validate = require("../middleware/validate.js");
+const { memberSchema } = require("../schemas/index.js");
 
 const router = Router();
 
@@ -104,7 +106,7 @@ router.post(
   "/",
   auth,
   roleCheck("admin", "librarian"),
-  validateMember,
+  validate(memberSchema),
   memberController.createMember,
 );
 
@@ -112,7 +114,7 @@ router.post(
   "/librarian",
   auth,
   roleCheck("admin"),
-  validateMember,
+  validate(memberSchema),
   memberController.createLibrarian,
 );
 

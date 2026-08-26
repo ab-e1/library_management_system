@@ -1,8 +1,9 @@
 const { Router } = require("express");
-const { validateBook } = require("../middleware/validation.js");
+const validate = require("../middleware/validate.js");
 const booksController = require("../controller/booksController.js");
 const roleCheck = require("../middleware/roleCheck.js");
 const auth = require("../middleware/auth.js");
+const { bookSchema } = require("../schemas/index.js");
 
 const router = Router();
 
@@ -86,7 +87,7 @@ router.post(
   "/",
   auth,
   roleCheck("admin", "librarian"),
-  validateBook,
+  validate(bookSchema),
   booksController.createBook,
 );
 
