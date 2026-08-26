@@ -1,106 +1,108 @@
-const { members, nextId } = require("../data/members.js");
 const bcrypt = require("bcrypt");
 const { bcryptRounds } = require("../config/index.js");
-const { now } = require("../utils/date.js");
 const { memberInfo } = require("../utils/response.js");
+const pool = require("../data/connection.js");
 
-const createMember = (data) => {
-  const duplicate = members.some(
-    (m) => m.email.toLowerCase() === data.email.toLowerCase(),
+const createMember = async (data) => {
+  const duplicate = await pool.query(
+    "SELECT * FROM members WHERE email = $1 ",
+    [data.email],
   );
-  if (duplicate) {
+  if (duplicate.rows.length > 0) {
     return { ok: false, error: "email have already been registered" };
   }
-
-  const member = {
-    id: nextId(),
-    name: data.name,
-    email: data.email.toLowerCase(),
-    role: "member",
-    password: bcrypt.hashSync(data.password, bcryptRounds),
-    registeredAt: now(),
-  };
-  members.push(member);
+  const hashedPassword = await bcrypt.hash(data.password, bcryptRounds);
+  const createdMember = await pool.query(
+    "INSERT INTO members (name, email, password, role, registered_at) VALUES ($1, $2, $3, 'member', NOW()) RETURNING * ",
+    [data.name, data.email, hashedPassword],
+  );
+  const member = memberInfo(createdMember.rows[0]);
   return { ok: true, data: member };
 };
 
-const getAllMembers = () => {
-  return { ok: true, data: members.map(memberInfo) };
+const getAllMembers = async () => {
+  const members = await pool.query("SELECT * FROM members");
+  return { ok: true, data: members.rows.map(memberInfo) };
 };
 
-const getMemberByEmail = (query) => {
-  const member = members.find(
-    (s) => s.email.toLowerCase() === query.toLowerCase(),
-  );
-  if (!member) {
+const getMemberByEmail = async (query) => {
+  const member = await pool.query("SELECT * FROM members WHERE email = $1", [
+    query,
+  ]);
+  if (member.rows.length === 0) {
     return { ok: false, error: "member not found with the provided email" };
   }
-  return { ok: true, data: memberInfo(member) };
+  return { ok: true, data: memberInfo(member.rows[0]) };
 };
 
-const getMemberById = (id) => {
-  const member = members.find((m) => m.id === Number(id));
+const getMemberById = async (id) => {
+  const member = await pool.query("SELECT * FROM members WHERE id = $1", [id]);
 
-  if (!member) {
+  if (member.rows.length === 0) {
     return { ok: false, error: "no memebr with the provided id " };
   }
-  return { ok: true, data: memberInfo(member) };
+  return { ok: true, data: memberInfo(member.rows[0]) };
 };
 
-const updateMember = (id, data) => {
-  const index = members.findIndex((s) => s.id === Number(id));
-  if (index === -1) {
+const updateMember = async (id, data) => {
+  const check = await pool.query("  SELECT * FROM members WHERE id = $1", [id]);
+  if (check.rows.length === 0) {
     return { ok: false, error: "member not found with the provided id" };
   }
-
-  const member = (members[index] = { ...members[index], ...data });
-
-  return { ok: true, data: memberInfo(member) };
-};
-
-const deleteMember = (id) => {
-  const index = members.findIndex((s) => s.id === Number(id));
-  if (index === -1) {
-    return { ok: false, error: "member not found with the provided id" };
-  }
-  const [deleted] = members.splice(index, 1);
-  return { ok: true, data: memberInfo(deleted) };
-};
-
-const createLibrarian = (data) => {
-  const duplicate = members.find(
-    (s) => s.email.toLowerCase().trim() === data.email.toLowerCase().trim(),
+  const hashedPassword = await bcrypt.hash(data.password, bcryptRounds);
+  const member = await pool.query(
+    "UPDATE members SET name = $1, email = $2 , password = $3 WHERE id = $4 RETURNING * ",
+    [data.name, data.email, hashedPassword, id],
   );
-  if (duplicate && duplicate.role === "member") {
+  return { ok: true, data: memberInfo(member.rows[0]) };
+};
+
+const deleteMember = async (id) => {
+  const check = await pool.query("SELECT * FROM members WHERE id = $1", [id]);
+  if (check.rows.length === 0) {
+    return { ok: false, error: "member not found with the provided id" };
+  }
+
+  const deleted = await pool.query(
+    "DELETE FROM members WHERE id = $1 RETURNING * ",
+    [id],
+  );
+  return { ok: true, data: memberInfo(deleted.rows[0]) };
+};
+
+const createLibrarian = async (data) => {
+  const duplicate = await pool.query(
+    "SELECT * FROM members WHERE email = $1 ",
+    [data.email],
+  );
+  if (duplicate.rows.length > 0 && duplicate.rows[0].role === "member") {
     return {
       ok: false,
       error: "email already registered as a member ",
     };
   }
-  if (duplicate && duplicate.role === "librarian") {
+  if (duplicate.rows.length > 0 && duplicate.rows[0].role === "librarian") {
     return {
       ok: false,
       error: "librarian already registered with this email",
     };
   }
-  if (duplicate && duplicate.role === "admin") {
+  if (duplicate.rows.length > 0 && duplicate.rows[0].role === "admin") {
     return {
       ok: false,
       error: "email registed as admin",
     };
   }
-  const librarian = {
-    id: nextId(),
-    name: data.name,
-    email: data.email.toLowerCase(),
-    role: "librarian",
-    password: bcrypt.hashSync(data.password, bcryptRounds),
-    registeredAt: now(),
-  };
+
+  const hashedPassword = await bcrypt.hash(data.password, bcryptRounds);
+  const librarian = await pool.query(
+    "INSERT INTO members (name, email, password, role, registered_at) VALUES ($1, $2, $3, 'librarian', NOW()) RETURNING * ",
+    [data.name, data.email, hashedPassword],
+  );
 
   return {
     ok: true,
-    data: memberInfo(librarian),
+    data: memberInfo(librarian.rows[0]),
   };
 };
 
