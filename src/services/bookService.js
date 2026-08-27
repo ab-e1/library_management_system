@@ -57,13 +57,24 @@ const deleteBook = async (id) => {
 
   if (check.rows.length === 0) {
     return { ok: false, error: "No book with the provided id" };
-  } else {
-    const deleted = await pool.query(
-      "DELETE FROM books WHERE id = $1 RETURNING * ",
-      [id],
-    );
-    return { ok: true, data: deleted.rows[0] };
   }
+
+  const activeLoans = await pool.query(
+    "SELECT * FROM loans WHERE book_id = $1 AND status = 'borrowed'",
+    [id],
+  );
+  if (activeLoans.rows.length > 0) {
+    return {
+      ok: false,
+      error: `Cannot delete book — ${activeLoans.rows.length} active loan(s) exist. Return the book first.`,
+    };
+  }
+
+  const deleted = await pool.query(
+    "DELETE FROM books WHERE id = $1 RETURNING * ",
+    [id],
+  );
+  return { ok: true, data: deleted.rows[0] };
 };
 const addCopies = async (bookId, quantity) => {
   const check = await pool.query("SELECT * FROM books WHERE id = $1", [bookId]);
