@@ -7,6 +7,7 @@ const errorHandler = require("./middleware/errorHandler.js");
 const logger = require("./middleware/logger.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const { object } = require("zod");
 
 const app = express();
 app.use(express.json());
@@ -54,6 +55,21 @@ const options = {
             dueAt: { type: "string", format: "date-time" },
             returnedAt: { type: "string", format: "date-time", nullable: true },
             status: { type: "string", enum: ["borrowed", "returned"] },
+          },
+        },
+        registerInput: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            email: { type: "string" },
+            password: { type: "string" },
+          },
+        },
+        loginInput: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            password: { type: "string" },
           },
         },
       },
