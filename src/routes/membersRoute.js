@@ -1,5 +1,4 @@
 const { Router } = require("express");
-const { validateMember } = require("../middleware/validation.js");
 const memberController = require("../controller/membersController.js");
 const roleCheck = require("../middleware/roleCheck.js");
 const auth = require("../middleware/auth.js");
