@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS members (
  
  CREATE TABLE IF NOT EXISTS loans(
     id SERIAL PRIMARY KEY,
-    book_id INTEGER REFERENCES books(id),
+    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
     member_id INTEGER REFERENCES members(id),
     borrowed_at TIMESTAMP,
     due_at TIMESTAMP,
