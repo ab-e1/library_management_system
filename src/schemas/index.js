@@ -1,7 +1,7 @@
 const { z } = require("zod");
 
 const bookSchema = z.object({
-  tilte: z.string().min(1, "title cannot be empty"),
+  title: z.string().min(1, "title cannot be empty"),
   author: z.string().min(1, "author cannot be empty"),
   genre: z.string().min(1, "genre cannot be empty"),
   year: z.number().int().positive("year must be positive"),
